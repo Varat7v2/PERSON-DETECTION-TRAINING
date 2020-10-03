@@ -31,6 +31,8 @@ from PIL import Image
 from object_detection.utils import dataset_util # from path
 from collections import namedtuple, OrderedDict # tf slim
 
+import dataset_config as config
+
 flags = tf.app.flags
 # flags = tf.compat.v1.flags
 

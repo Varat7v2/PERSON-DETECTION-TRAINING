@@ -25,22 +25,23 @@ for annotation_file in tqdm(glob.glob(config.ANNOTATION_PATH+'/*.txt')):
 	lines = [np.asarray(line.rstrip().split(' '), dtype=np.uint).tolist() for line in lines[1:]]
 
 	for line in lines:
-		if config.TFRECORD and line[0] == 1:
-			width = line[3] - line[1]
-			height = line[4] - line[2]
-			iclass = line[0]
+		iclass = line[0]
+		width = line[3] - line[1]
+		height = line[4] - line[2]
+		box = line[1:]
+		if config.TFRECORD and iclass == 1 and (box[3]-box[1]) > (1/2 * height): #1: pedestrian class
 			bbox = [image_name+'.jpg', width, height, 'person']
 			bbox.extend(line[1:])
 			bboxes.append(bbox)
-		else:
-			if line[0] == 1:
-				box = line[1:]
-				cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0,0,255), 2)
-				bbox.append(box)
+		# else:
+		# 	if line[0] == 1:
+		# 		box = line[1:]
+		# 		cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0,0,255), 2)
+		# 		bbox.append(box)
 
 if config.TFRECORD:
 	df = pd.DataFrame(bboxes, columns=['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax'])
 	df.to_csv('{}/data/{}.csv'.format(config.DATASET, config.DATASET), index=False)
-else:
-	cv2.imwrite(config.OUTPUT_PATH + '/' + image_name + '_processd.jpg', img)
-	bboxes.append(np.asarray(bbox))
+# else:
+# 	cv2.imwrite(config.OUTPUT_PATH + '/' + image_name + '_processd.jpg', img)
+# 	bboxes.append(np.asarray(bbox))

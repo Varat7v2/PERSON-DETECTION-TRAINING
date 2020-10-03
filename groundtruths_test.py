@@ -6,7 +6,11 @@ from tqdm import tqdm
 import dataset_config as config
 
 GROUNDTRUTHS_ANNOTS = '{}/data/{}_{}.csv'.format(config.DATASET, config.DATASET, config.GROUNDTRUTHS_TEST)
-IMAGES_PATH = '{}/Images'.format(config.DATASET)
+# IMAGES_PATH = '{}/Images'.format(config.DATASET)
+if config.DATASET == 'widerPerson':
+	IMAGES_PATH = config.IMAGES_PATH
+if config.DATASET == 'cityPerson' or 'eurocityPerson':
+	IMAGES_PATH = config.IMAGES_CONVERTED
 OUTPUT_PATH = '{}/{}_processed'.format(config.DATASET, config.GROUNDTRUTHS_TEST)
 
 if not os.path.exists(GROUNDTRUTHS_ANNOTS):

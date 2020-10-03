@@ -1,16 +1,12 @@
 import os, sys, glob
 
-DATASET = 'cityPerson'
+DATASET = 'eurocityPerson'
 GROUNDTRUTHS_TEST = 'test'
 # MODEL_PATH = 'models/frozen_graph_15143.pb'
 
-DATA_PATH = '{}/data'.format(DATASET)
-
-if not os.path.exists(DATA_PATH):
-    os.makedirs(DATA_PATH)
-
 ANNOTATION_PATH = '{}/Annotations'.format(DATASET)
 IMAGES_PATH = '{}/Images'.format(DATASET)
+IMAGE_FORMAT = 'jpg'
 IMAGES_CONVERTED = '{}/Images_conv'.format(DATASET)
 OUTPUT_PATH = '{}/processed_images'.format(DATASET)
 TFRECORD = True
