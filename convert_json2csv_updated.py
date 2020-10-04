@@ -25,6 +25,8 @@ for mydir in os.listdir(config.ANNOTATION_PATH):
 			
 			img_jpg = img_png.split('.')[0]+'.jpg'
 			frame = cv2.imread(os.path.join(config.IMAGES_PATH, mydir, subdir) + '/' + img_png)
+
+			# FOR RESIZING IMAGES
 			# frame = cv2.imread(config.IMAGES_PATH + '/' + img_jpg)
 			# frame_height, frame_width, _ = frame.shape
 			# aspect_ratio = frame_height / frame_width
@@ -33,6 +35,7 @@ for mydir in os.listdir(config.ANNOTATION_PATH):
 			# resized_height, resized_width, _ = frame_resized.shape
 			# # print(resized_height, resized_width)
 			# # sys.exit(0)
+
 			cv2.imwrite(config.IMAGES_CONVERTED + '/' + img_jpg, frame)
 			
 			# Opening JSON file 
@@ -40,37 +43,39 @@ for mydir in os.listdir(config.ANNOTATION_PATH):
 			data = json.load(f)
 			f.close()
 
-			for idict in data['objects']:
-				bbox = idict['bbox']
-				label = idict['label']
-				if label == 'pedestrian' #and ((bbox[1]+bbox[3])-bbox[1]) > (1/10 * data['imgHeight']):
-					mydict = dict()
-					mydict['filename'] = img_jpg
-					
-					# ORIGINAL IMAGE PROPERTIES
-					mydict['xmin'] = bbox[0]
-					mydict['ymin'] = bbox[1]
-					mydict['xmax'] = bbox[0] + bbox[2]
-					mydict['ymax'] = bbox[1] + bbox[3]
-					mydict['width'] = mydict['xmax'] - mydict['xmin']
-					mydict['height'] = mydict['ymax'] - mydict['ymin']
+			print(data)
 
-					# # RESIZED IMAGES PROPERTIES
-					# mydict['width'] = resized_width
-					# mydict['height'] = resized_height
-					# mydict['xmin'] = int(bbox[0] / frame_width * resized_width)
-					# mydict['ymin'] = int(bbox[1] / frame_height * resized_height)
-					# mydict['xmax'] = int((bbox[0] + bbox[2]) / frame_width * resized_width)
-					# mydict['ymax'] = int((bbox[1] + bbox[3]) / frame_height * resized_height)
+	# 		for idict in data['objects']:
+	# 			bbox = idict['bbox']
+	# 			label = idict['label']
+	# 			if label == 'pedestrian' #and ((bbox[1]+bbox[3])-bbox[1]) > (1/10 * data['imgHeight']):
+	# 				mydict = dict()
+	# 				mydict['filename'] = img_jpg
 					
-					mydict['class'] = 'person' #label
-					# cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[0]+bbox[2], bbox[1]+bbox[3]), (0,255,0), 2)
-					# cv2.putText(frame, label, (bbox[0]-20, bbox[1]-20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+	# 				# ORIGINAL IMAGE PROPERTIES
+	# 				mydict['xmin'] = bbox[0]
+	# 				mydict['ymin'] = bbox[1]
+	# 				mydict['xmax'] = bbox[0] + bbox[2]
+	# 				mydict['ymax'] = bbox[1] + bbox[3]
+	# 				mydict['width'] = mydict['xmax'] - mydict['xmin']
+	# 				mydict['height'] = mydict['ymax'] - mydict['ymin']
 
-					csv_file.append(mydict)
+	# 				# # RESIZED IMAGES PROPERTIES
+	# 				# mydict['width'] = resized_width
+	# 				# mydict['height'] = resized_height
+	# 				# mydict['xmin'] = int(bbox[0] / frame_width * resized_width)
+	# 				# mydict['ymin'] = int(bbox[1] / frame_height * resized_height)
+	# 				# mydict['xmax'] = int((bbox[0] + bbox[2]) / frame_width * resized_width)
+	# 				# mydict['ymax'] = int((bbox[1] + bbox[3]) / frame_height * resized_height)
+					
+	# 				mydict['class'] = 'person' #label
+	# 				# cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[0]+bbox[2], bbox[1]+bbox[3]), (0,255,0), 2)
+	# 				# cv2.putText(frame, label, (bbox[0]-20, bbox[1]-20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+
+	# 				csv_file.append(mydict)
 			
-	df = pd.DataFrame.from_dict(csv_file)
-	df = df[['filename', 'width',	'height', 'class',	'xmin',	'ymin',	'xmax',	'ymax']]
-	# df.to_csv('{}.csv'.format(mydir), index=False)
-	df.to_csv('{}/data/{}.csv'.format(config.DATASET, config.DATASET), index=False)
-	print('Successfully converted to csv!')
+	# df = pd.DataFrame.from_dict(csv_file)
+	# df = df[['filename', 'width',	'height', 'class',	'xmin',	'ymin',	'xmax',	'ymax']]
+	# # df.to_csv('{}.csv'.format(mydir), index=False)
+	# df.to_csv('{}/data/{}.csv'.format(config.DATASET, config.DATASET), index=False)
+	# print('Successfully converted to csv!')
