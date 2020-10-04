@@ -20,14 +20,14 @@ for mydir in os.listdir(config.ANNOTATION_PATH):
 			city = jsonfile.split('/')[-2]
 			if config.DATASET == 'cityPerson':
 				img_png = jsonfile.split('/')[-1].split('.')[0][:-18] + '_leftImg8bit.png'
+				frame = cv2.imread(config.IMAGES_PATH + '/' + img_jpg)
 			if config.DATASET == 'eurocityPerson':
 				img_png = jsonfile.split('/')[-1].split('.')[0] + '.png'
+				frame = cv2.imread(os.path.join(config.IMAGES_PATH, mydir, subdir) + '/' + img_png)
 			
 			img_jpg = img_png.split('.')[0]+'.jpg'
-			frame = cv2.imread(os.path.join(config.IMAGES_PATH, mydir, subdir) + '/' + img_png)
 
 			# FOR RESIZING IMAGES
-			# frame = cv2.imread(config.IMAGES_PATH + '/' + img_jpg)
 			# frame_height, frame_width, _ = frame.shape
 			# aspect_ratio = frame_height / frame_width
 			# frame_resized = cv2.resize(frame, (640, int(640*aspect_ratio)), interpolation = cv2.INTER_AREA)
